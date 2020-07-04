@@ -17,8 +17,12 @@
     
     <section id="taskEntry" class="container">
       <h2>What do you need to do?</h2>
-      <input type="text" id="taskIn" placeholder="To do...">
-      <button class="btn btn-success" type="button" id="addButton">Add Task</button>
+      <div class="input-group mb-3">
+        <input class="form-control" type="text" id="taskIn" placeholder="To do..." aria-label="Add a new item to do.">
+        <div class="input-group-append">
+          <button class="btn btn-success" type="button" id="addButton">Add Task</button>
+        </div>
+      </div>
     </section>
     
     <hr>
@@ -32,11 +36,7 @@
           </tr>
         </thead>
         <tbody id="taskTBody">
-          <tr data-id='01'>
-            <td><input type="checkbox" class="checkbox"/></td>
-            <td class="todo-textbox"><input type="text" disabled placeholder="Get groceries"></td>
-            <td><button class="removeButton">Remove</button></td>
-          </tr>
+          
         </tbody>
       </table>
     </section>
