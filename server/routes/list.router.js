@@ -19,7 +19,7 @@ router.delete( '/:id', ( req, res )=>{
 router.get( '/', ( req, res )=>{
     console.log( '/list GET' );
     /// - query: SELECT * FROM "todo_list" - ///
-    let queryString = `SELECT * FROM "todo_list" ORDER BY "id" ASC`;
+    let queryString = `SELECT * FROM "todo_list" ORDER BY "completed" ASC`;
     pool.query( queryString ).then( ( result )=>{
         // success
         res.send( result.rows );
@@ -30,7 +30,7 @@ router.get( '/', ( req, res )=>{
 }) // end /list GET
 
 router.post( '/', ( req, res )=>{
-    console.log( 'in /list POST:', req.body );
+    console.log( 'in /list POST:', req.body.task );
     let queryString = `INSERT INTO todo_list (task, completed)
         VALUES ( $1 , FALSE)`;
     pool.query( queryString, 
