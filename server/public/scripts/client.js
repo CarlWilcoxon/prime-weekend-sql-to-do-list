@@ -11,14 +11,10 @@ $( document ).ready( function(){
 }); // end doc ready
 
 function addTask() {
-  console.log('adding a new Koala');
-  console.log( 'in addButton on click' );
-    // get user input and put in an object
-    // NOT WORKING YET :(
-    // using a test object
+  console.log('adding a new Task');
 
+    // get user input and put in an object
   let task = $('#taskIn').val();
-  
   let newTask = {task};
 
   // ajax call with the new obejct
@@ -37,19 +33,10 @@ function addTask() {
   })
 }
 
-function convertToBool(input) {
-  if (input.toLowerCase() == 'no' || input.toLowerCase() == 'not yet' ||
-  input.toLowerCase() == 'nope' || input.toLowerCase() == 'kinda') {
-    return false;
-  } else {
-    return !!input; //everything that is not falsy return as true
-  }
-}
-
 function editKoala() {
   console.log('edit button clicked');
 }
-
+/*
 function getKoalas(){
   console.log( 'in getKoalas' );
   // ajax call to server to get koalas
@@ -63,7 +50,12 @@ function getKoalas(){
     console.log('Error getting Koalas:', err);
   });
 } // end getKoalas
+*/
+function refreshTasks() {
+  console.log('refreshTasks');
+}
 
+/*
 function removeKoala() {
   console.log(this);
   let id = $(this).closest('tr').data('id');
@@ -78,14 +70,17 @@ function removeKoala() {
     console.log('Error getting Koalas:', err);
   });
 }
+*/
 
 function setupClickListeners() {
-  $( '#addButton' ).on( 'click', addKoala);
-  $( '#viewTasks' ).on('click', '.removeButton', removeKoala);
-  $( '#viewTasks' ).on('click', '.editButton', editKoala);
-  $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
+  $( '#addButton' ).on( 'click', addTask);
+  // $( '#viewTasks').on( 'click', '.checkbox', toggleCheckbox);
+  // $( '#viewTasks' ).on('click', '.removeButton', removeKoala);
+  // $( '#viewTasks' ).on('click', '.editButton', editKoala);
+  // $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
 
+/*
 function toggleTransfer() {
 
   let id = $(this).closest('tr').data('id');
@@ -100,6 +95,7 @@ function toggleTransfer() {
     console.log('Error getting Koalas:', err);
   });
 }
+*/
 
 function updateTasks(response) {
   $('#viewTasks').empty();
