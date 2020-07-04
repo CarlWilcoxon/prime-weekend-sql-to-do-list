@@ -42,7 +42,7 @@ router.post( '/', ( req, res )=>{
         }) //end query
 }) // end /list POST
 
-router.put( '/toggle-complete/:id', ( req, res )=>{
+router.put( '/toggle-completed/:id', ( req, res )=>{
   console.log( 'in /list PUT:', req.params.id );
   let queryString =   `UPDATE todo_list
                       SET completed = NOT completed

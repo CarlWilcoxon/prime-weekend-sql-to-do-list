@@ -123,26 +123,26 @@ function removeTask() {
 
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', addTask);
-  // $( '#viewTasks').on( 'click', '.checkbox', toggleCheckbox);
+  $( '#taskDisplay').on('change', '.checkbox', toggleCheckbox);
   $( '#viewTasks' ).on('click', '.removeButton', removeTask);
   $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
   // $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
 
-/*
-function toggleTransfer() {
+function toggleCheckbox() {
+
+  console.log('checkbox clicked!');
 
   let id = $(this).closest('tr').data('id');
   
   $.ajax({
     type: 'PUT',
-    url: '/koalas/toggle-ready/' + id
+    url: '/list/toggle-completed/' + id
     //then, when you get a response, append a table row to the DOM with the info you received
   }).then(function (response) {
-    getKoalas();
+    refreshTasks();
   }).catch(function  (err) {
-    console.log('Error getting Koalas:', err);
+    console.log('Error updating tasks:', err);
   });
 }
-*/
