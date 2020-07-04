@@ -1,52 +1,39 @@
 console.log( 'js' );
 
 $( document ).ready( function(){
-  console.log( 'JQ' );
+  console.log( 'DOM is ready' );
   // Establish Click Listeners
   setupClickListeners()
   // load existing koalas on page load
-  getKoalas();
+  refreshTasks();
 
   //Swal.fire("Hello World!");
 }); // end doc ready
 
-function addKoala() {
+function addTask() {
   console.log('adding a new Koala');
   console.log( 'in addButton on click' );
     // get user input and put in an object
     // NOT WORKING YET :(
     // using a test object
 
-  let tempName = $('#nameIn').val();
-  let tempGender = $('#genderIn').val().slice(0,1).toUpperCase();
-  let tempAge = $('#ageIn').val();
-  let tempReady = convertToBool($('#readyForTransferIn').val());
-  let tempNotes = $('#notesIn').val();
-
-  let newKoala = {
-    name: tempName,
-    gender: tempGender,
-    age: tempAge,
-    ready_for_transfer: tempReady,
-    notes: tempNotes
-  };
+  let task = $('#taskIn').val();
+  
+  let newTask = {task};
 
   // ajax call with the new obejct
   $.ajax({
     type: 'POST',
-    url: '/koalas',
-    data: newKoala
+    url: '/tasks',
+    data: newTask
     //then, when you get a response, append a table row to the DOM with the info you received
   }).then(function (response) {
-    console.log(newKoala, 'added!');
-    $('#nameIn').val('');
-    $('#genderIn').val('');
-    $('#ageIn').val('');
-    $('#readyForTransferIn').val('');
-    $('#notesIn').val('');
-    getKoalas();
+    console.log(newTask, 'added!');
+    $('#taskIn').val('');
+    
+    refreshTasks();
   }).catch(function  (err) {
-    console.log('Error adding a Koala:', err);
+    console.log('Error adding a task:', err);
   })
 }
 
@@ -94,9 +81,9 @@ function removeKoala() {
 
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', addKoala);
-  $( '#viewKoalas' ).on('click', '.removeButton', removeKoala);
-  $( '#viewKoalas' ).on('click', '.editButton', editKoala);
-  $( '#viewKoalas' ).on('click', '.readyButton', toggleTransfer);
+  $( '#viewTasks' ).on('click', '.removeButton', removeKoala);
+  $( '#viewTasks' ).on('click', '.editButton', editKoala);
+  $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
 
 function toggleTransfer() {
@@ -114,17 +101,14 @@ function toggleTransfer() {
   });
 }
 
-function updateKoalas(response) {
-  $('#viewKoalas').empty();
+function updateTasks(response) {
+  $('#viewTasks').empty();
   for (let i = 0; i < response.length; i++) {
-    let koala = response[i];
-    $('#viewKoalas').append(`
-      <tr data-id="${koala.id}">
-        <td>${koala.name}</td>
-        <td>${koala.gender}</td>
-        <td>${koala.age}</td>
-        <td><button class="readyButton">${koala.ready_for_transfer? 'Ready for transfer': 'Not ready for transfer'}</button></td>
-        <td>${koala.notes}</td>
+    let item = response[i];
+    $('#viewTasks').append(`
+      <tr data-id="${item.id}">
+        <td><input type="checkbox">${item.complete}</button></td>
+        <td>${item.task}</td>
         <td><button class="removeButton">Remove</button></td>
       </tr>
     `); // <td><button class="editButton">Edit</button></td>

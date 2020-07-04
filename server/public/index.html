@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Koalla Holla</title>
+    <title>Welcome to ToDo, the to-do list app</title>
     <script src="vendors/jquery-3.3.1.min.js" charset="utf-8"></script>
     <script src="vendors/sweetalert2.all.min.js"></script>
     <script src="vendors/bootstrap.bundle.min.js"></script>
@@ -12,7 +12,7 @@
   </head>
   <body>
     <header class="navbar navbar-dark">
-      <img src="images/icon.png" class="icon" />
+      <img src="images/icon.jpg" class="icon" />
     </header>
     
     <section id="taskEntry">
@@ -22,9 +22,11 @@
     </section>
     
     <section id="taskDisplay">
-      <h2>To Do List</h2>
       <table>
-        <tbody id="viewKoalas">
+        <thead>
+          <td><h2>ToDo</h2></td>
+        </thead>
+        <tbody id="viewTasks">
         </tbody>
       </table>
     </section>
