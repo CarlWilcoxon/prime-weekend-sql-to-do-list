@@ -6,8 +6,6 @@ $( document ).ready( function(){
   setupClickListeners()
   // load existing tasks on page load
   refreshTasks();
-
-  //Swal.fire("Hello World!");
 }); // end doc ready
 
 function addTask() {
@@ -121,11 +119,10 @@ function removeTask() {
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', addTask);
   $( '#taskDisplay').on('change', '.checkbox', toggleCheckbox);
-  $( '#viewTasks' ).on('click', '.removeButton', removeTask);
+  $( '#taskDisplay' ).on('click', '.removeButton', removeTask);
   $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
   $( '#taskDisplay' ).on('keypress', '.todo-textbox', updateTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
-  // $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
 
 function toggleCheckbox() {
