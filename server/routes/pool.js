@@ -1,7 +1,7 @@
 const pg = require( 'pg' );
 
 const pool = new pg.Pool({
-    database: 'koala_holla',
+    database: 'todo_list',
     host: 'localhost',
     port: 5432,
     max: 12,

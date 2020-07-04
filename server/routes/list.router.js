@@ -5,8 +5,8 @@ const pool = require( './pool' );
 // routes
 
 router.delete( '/:id', ( req, res )=>{
-  console.log( 'in /koalas DELETE:', req.params.id );
-  let queryString = `DELETE FROM koala_holla
+  console.log( 'in /list DELETE:', req.params.id );
+  let queryString = `DELETE FROM todo_list
       WHERE id = $1;`;
   pool.query( queryString, [ req.params.id ] ).then( ( result )=>{
           res.sendStatus( 201 );
@@ -17,9 +17,9 @@ router.delete( '/:id', ( req, res )=>{
 })
 
 router.get( '/', ( req, res )=>{
-    console.log( '/koalas GET' );
-    /// - query: SELECT * FROM "koals_holla" - ///
-    let queryString = `SELECT * FROM "koala_holla" ORDER BY "id" ASC`;
+    console.log( '/list GET' );
+    /// - query: SELECT * FROM "todo_list" - ///
+    let queryString = `SELECT * FROM "todo_list" ORDER BY "id" ASC`;
     pool.query( queryString ).then( ( result )=>{
         // success
         res.send( result.rows );
@@ -27,25 +27,25 @@ router.get( '/', ( req, res )=>{
         // error
         res.sendStatus( 500 );
     })
-}) // end /koalas GET
+}) // end /list GET
 
 router.post( '/', ( req, res )=>{
-    console.log( 'in /koalas POST:', req.body );
-    let queryString = `INSERT INTO koala_holla ("name", gender, age, ready_for_transfer, notes)
-        VALUES ( $1, $2, $3, $4, $5 )`;
+    console.log( 'in /list POST:', req.body );
+    let queryString = `INSERT INTO todo_list (task, completed)
+        VALUES ( $1 , FALSE)`;
     pool.query( queryString, 
-        [ req.body.name, req.body.gender , req.body.age, req.body.ready_for_transfer, req.body.notes ] ).then( ( result )=>{
+        [ req.body.task ] ).then( ( result )=>{
             res.sendStatus( 201 );
         }).catch( ( err )=>{
             console.log( err );
             res.sendStatus( 500 );
         }) //end query
-}) // end /koalas POST
+}) // end /list POST
 
-router.put( '/toggle-ready/:id', ( req, res )=>{
-  console.log( 'in /koalas PUT:', req.params.id );
-  let queryString =   `UPDATE koala_holla
-                      SET ready_for_transfer = NOT ready_for_transfer
+router.put( '/toggle-complete/:id', ( req, res )=>{
+  console.log( 'in /list PUT:', req.params.id );
+  let queryString =   `UPDATE todo_list
+                      SET completed = NOT completed
                       WHERE id = $1;`;
   pool.query( queryString, [ req.params.id ] ).then( ( result )=>{
           res.sendStatus( 201 );

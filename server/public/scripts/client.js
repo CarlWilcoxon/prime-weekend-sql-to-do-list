@@ -22,19 +22,42 @@ function addTask() {
     type: 'POST',
     url: '/tasks',
     data: newTask
+    
     //then, when you get a response, append a table row to the DOM with the info you received
   }).then(function (response) {
     console.log(newTask, 'added!');
     $('#taskIn').val('');
-    
     refreshTasks();
+
   }).catch(function  (err) {
     console.log('Error adding a task:', err);
   })
 }
 
-function editKoala() {
-  console.log('edit button clicked');
+function editTaskText() {
+  console.log('edit button clicked', this);
+  //try select [this] disabled object, then enable it, 
+  //else disable it and send an AJAX PUT request
+  
+  textbox = $(this).children();
+
+  console.log(textbox.is(':disabled'));
+
+  //if the textbox is disabled, enable it and fill it with the placeholder value
+  //then focus on it, so that the user can type
+  if (textbox.is(':disabled')) {
+    textbox.prop( "disabled", false );
+    textbox.val(`${textbox.attr('placeholder')}`);
+    textbox.focus();
+  } else if (!textbox.is(':disabled')) {
+    textbox.prop( "disabled", true );
+    //TODO call method to update 
+  }
+  // Disable #x
+  // $( "#x ).prop( "disabled", true );
+ 
+  // // Enable #x
+  // $( "#x" ).prop( "disabled", false );
 }
 /*
 function getKoalas(){
@@ -52,7 +75,7 @@ function getKoalas(){
 } // end getKoalas
 */
 function refreshTasks() {
-  console.log('refreshTasks');
+  console.log('in refreshTasks, doing nothing atm');
 }
 
 /*
@@ -76,7 +99,8 @@ function setupClickListeners() {
   $( '#addButton' ).on( 'click', addTask);
   // $( '#viewTasks').on( 'click', '.checkbox', toggleCheckbox);
   // $( '#viewTasks' ).on('click', '.removeButton', removeKoala);
-  // $( '#viewTasks' ).on('click', '.editButton', editKoala);
+  $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
+  $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
   // $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
 
@@ -98,10 +122,10 @@ function toggleTransfer() {
 */
 
 function updateTasks(response) {
-  $('#viewTasks').empty();
+  $('#taskTBody').empty();
   for (let i = 0; i < response.length; i++) {
     let item = response[i];
-    $('#viewTasks').append(`
+    $('#taskTBody').append(`
       <tr data-id="${item.id}">
         <td><input type="checkbox">${item.complete}</button></td>
         <td>${item.task}</td>

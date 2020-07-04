@@ -10,26 +10,30 @@
     <link rel="stylesheet" href="views/bootstrap.min.css">
     <link rel="stylesheet" href="views/styles.css">
   </head>
-  <body>
+  <body class="bg-primary">
     <header class="navbar navbar-dark">
       <img src="images/icon.jpg" class="icon" />
     </header>
     
-    <section id="taskEntry">
+    <section id="taskEntry" class="container">
       <h2>What do you need to do?</h2>
       <input type="text" id="taskIn" placeholder="To do...">
       <button type="button" id="addButton">Add Task</button>
     </section>
     
-    <section id="taskDisplay">
-      <table>
+    <hr>
+    
+    <section id="taskDisplay" class="container">
+      <table class="table table-light">
         <thead>
-          <td><h2>ToDo</h2></td>
+          <tr>
+            <th>ToDo</th>
+          </tr>
         </thead>
-        <tbody id="viewTasks">
+        <tbody id="taskTBody">
           <tr data-id='01'>
             <td><input type="checkbox" class="checkbox"/></td>
-            <td>Get groceries</td>
+            <td class="todo-textbox"><input type="text" disabled placeholder="Get groceries"></td>
             <td><button class="removeButton">Remove</button></td>
           </tr>
         </tbody>
