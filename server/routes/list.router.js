@@ -43,7 +43,7 @@ router.post( '/', ( req, res )=>{
 }) // end /list POST
 
 router.put( '/toggle-completed/:id', ( req, res )=>{
-  console.log( 'in /list PUT:', req.params.id );
+  console.log( 'in /list/toggle-completed PUT:', req.params.id );
   let queryString =   `UPDATE todo_list
                       SET completed = NOT completed
                       WHERE id = $1;`;
@@ -55,5 +55,17 @@ router.put( '/toggle-completed/:id', ( req, res )=>{
       }) //end query
 })
 
+router.put( '/update-text/:id', ( req, res )=>{
+  console.log( 'in /list/update-text PUT:', req.body.newText, req.params.id );
+  let queryString =   `UPDATE todo_list
+                      SET task = $1
+                      WHERE id = $2;`;
+  pool.query( queryString, [ req.body.newText, req.params.id ] ).then( ( result )=>{
+          res.sendStatus( 201 );
+      }).catch( ( err )=>{
+          console.log( err );
+          res.sendStatus( 500 );
+      }) //end query
+})
 // export
 module.exports = router;

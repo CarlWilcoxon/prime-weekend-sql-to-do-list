@@ -49,9 +49,6 @@ function editTaskText() {
     textbox.prop( "disabled", false );
     textbox.val(`${textbox.attr('placeholder')}`);
     textbox.focus();
-  } else if (!textbox.is(':disabled')) {
-    textbox.prop( "disabled", true );
-    //TODO call method to update 
   }
 }
 
@@ -61,7 +58,7 @@ function formatList(response) {
   for (let i = 0; i < response.length; i++) {
     let item = response[i];
     $('#taskTBody').append(`
-      <tr data-id="${item.id}">
+      <tr data-id="${item.id}" ${(item.completed)? 'class="bg-success"': 'class="bg-info"'}>
         <td><input class="checkbox" type="checkbox" ${(item.completed)? 'checked' : ' '}/></td>
         <td class="todo-textbox"><input type="text" disabled placeholder="${item.task}"></td>
         <td><button class="removeButton">Remove</button></td>
@@ -126,6 +123,7 @@ function setupClickListeners() {
   $( '#taskDisplay').on('change', '.checkbox', toggleCheckbox);
   $( '#viewTasks' ).on('click', '.removeButton', removeTask);
   $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
+  $( '#taskDisplay' ).on('keypress', '.todo-textbox', updateTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
   // $( '#viewTasks' ).on('click', '.readyButton', toggleTransfer);
 }
@@ -145,4 +143,31 @@ function toggleCheckbox() {
   }).catch(function  (err) {
     console.log('Error updating tasks:', err);
   });
+}
+
+function updateTaskText(event) {
+  if (event.keyCode==13){
+    let id = $(this).closest('tr').data('id');
+    let newText = {newText: $(this).children('input').val()};
+    
+    console.log('trying to update', id);
+    console.log($(this).children());
+    if (!$(this).children().is(':disabled')) {
+      textbox.prop( "disabled", true );
+      console.log(newText);
+      $.ajax({
+        type: 'PUT',
+        url: '/list/update-text/' + id,
+        data: newText
+        //then, when you get a response, append a table row to the DOM with the info you received
+      }).then(function (response) {
+        console.log('DB updated!');
+        $(this).children('input').attr('placeholder', newText);
+      }).catch(function  (err) {
+        console.log('Error updating task:', err);
+      });
+    }
+  } else {
+  return;
+  }
 }
