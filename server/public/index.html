@@ -11,29 +11,19 @@
     <link rel="stylesheet" href="views/styles.css">
   </head>
   <body>
-    <header>
+    <header class="navbar navbar-dark">
       <img src="images/icon.png" class="icon" />
-      <h1>Koala Holla</h1>
-      <h3>1976 Llama Comma Drive</h2>
-      <h3>Walla Walla, WA</h2>
     </header>
+    
     <section id="taskEntry">
       <h2>What do you need to do?</h2>
       <input type="text" id="taskIn" placeholder="To do...">
       <button type="button" id="addButton">Add Task</button>
     </section>
+    
     <section id="taskDisplay">
-      <h2>All Koalas</h2>
+      <h2>To Do List</h2>
       <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Age</th>
-            <th>Ready for Transfer</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
         <tbody id="viewKoalas">
         </tbody>
       </table>
