@@ -51,6 +51,8 @@ function editTaskText() {
 function formatList(response) {
   console.log(response);
   $('#taskTBody').empty();
+  // Clear out the table and then append each row in the order provided by the database
+  // Store the task's id in the tr for future use.
   for (let i = 0; i < response.length; i++) {
     let item = response[i];
     $('#taskTBody').append(`
@@ -59,7 +61,7 @@ function formatList(response) {
         <td class="todo-textbox"><input type="text" disabled placeholder="${item.task}" aria-label="${item.task} click to edit"></td>
         <td><button class="removeButton btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmationDialog">Remove</button></td>
       </tr>
-    `); // <td><button class="editButton">Edit</button></td>
+    `);
   }
 }
 
@@ -113,14 +115,12 @@ function setupClickListeners() {
   $( '#taskDisplay' ).on('keypress', '.todo-textbox', updateTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
   $( '.modal').on( 'show.bs.modal', openConfirmationDialog);
-  $('.canceled')
   $('.confirmed').on('click', removeTask);
 }
 
 function toggleCheckbox() {
 
-  console.log('checkbox clicked!');
-
+  // take the table id from the tr and use it to update the database
   let id = $(this).closest('tr').data('id');
   
   $.ajax({
@@ -162,6 +162,6 @@ function updateTaskText(event) {
       }
     }
   } else {
-  return; // if somehow the textbox is disabled, do nothing
+  return; // if the enter key is not pressed, do nothing
   }
 }
