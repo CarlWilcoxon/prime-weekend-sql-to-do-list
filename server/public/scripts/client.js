@@ -65,30 +65,6 @@ function formatList(response) {
   }
 }
 
-/*
-Disable #x
-$( "#x ).prop( "disabled", true );
-
-Enable #x
-$( "#x" ).prop( "disabled", false );
-*/
-
-/*
-function getKoalas(){
-  console.log( 'in getKoalas' );
-  // ajax call to server to get koalas
-  $.ajax({
-    type: 'GET',
-    url: '/koalas'
-    //then, when you get a response, append a table row to the DOM with the info you received
-  }).then(function (response) {
-    updateKoalas(response);
-  }).catch(function  (err) {
-    console.log('Error getting Koalas:', err);
-  });
-} // end getKoalas
-*/
-
 function refreshTasks() {
   console.log('in refreshTasks');
   $.ajax({
