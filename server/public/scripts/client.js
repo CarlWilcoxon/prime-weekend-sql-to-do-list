@@ -33,13 +33,11 @@ function addTask() {
 }
 
 function editTaskText() {
+  // console.logs for troubleshooting, they can be removed
   console.log('edit button clicked', this);
-  //try select [this] disabled object, then enable it, 
-  //else disable it and send an AJAX PUT request
-  
-  textbox = $(this).children();
-
   console.log(textbox.is(':disabled'));
+
+  textbox = $(this).children();
 
   //if the textbox is disabled, enable it and fill it with the placeholder value
   //then focus on it, so that the user can type
@@ -59,35 +57,20 @@ function formatList(response) {
       <tr data-id="${item.id}" ${(item.completed)? 'class="bg-success"': 'class="bg-info"'}>
         <td><input class="checkbox" type="checkbox" ${(item.completed)? 'checked' : ' '}/></td>
         <td class="todo-textbox"><input type="text" disabled placeholder="${item.task}" aria-label="${item.task} click to edit"></td>
-        <td><button class="removeButton btn btn-danger btn-sm" aria-label="Remove task">Remove</button></td>
+        <td><button class="removeButton btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmationDialog">Remove</button></td>
       </tr>
     `); // <td><button class="editButton">Edit</button></td>
   }
 }
 
-/*
-Disable #x
-$( "#x ).prop( "disabled", true );
-
-Enable #x
-$( "#x" ).prop( "disabled", false );
-*/
-
-/*
-function getKoalas(){
-  console.log( 'in getKoalas' );
-  // ajax call to server to get koalas
-  $.ajax({
-    type: 'GET',
-    url: '/koalas'
-    //then, when you get a response, append a table row to the DOM with the info you received
-  }).then(function (response) {
-    updateKoalas(response);
-  }).catch(function  (err) {
-    console.log('Error getting Koalas:', err);
-  });
-} // end getKoalas
-*/
+function openConfirmationDialog(event) {
+  // console.log('this:', this);
+  // console.log('correct id:', $(event.relatedTarget).closest('tr').data('id') );
+  
+  // Get the id that was stored in each table row. And store it for later.
+  let tempID = $(event.relatedTarget).closest('tr').data('id');
+  $( '#dataStorage' ).data('id', tempID);
+}
 
 function refreshTasks() {
   console.log('in refreshTasks');
@@ -103,26 +86,35 @@ function refreshTasks() {
 }
 
 function removeTask() {
-  console.log(this);
-  let id = $(this).closest('tr').data('id');
+  console.log( 'Confirmed' );
+  // After the user has confirmed the removal, retrieve the task's id from storage
+  // and clear out the dataStorage div
+  let id = $( '#dataStorage' ).data().id;
+  $( '#dataStorage' ).data('id', '');
 
   $.ajax({
     type: 'DELETE',
     url: '/list/' + id
     //then, when you get a response, append a table row to the DOM with the info you received
-  }).then(refreshTasks()
-  ).catch(function  (err) {
-    console.log('Error getting Koalas:', err);
+  }).then(function  (response) {
+    $('#confirmationDialog').modal('toggle');
+    refreshTasks();
+  }).catch(function  (err) {
+    console.log('Error removing task, try again:', err);
+
   });
 }
 
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', addTask);
   $( '#taskDisplay').on('change', '.checkbox', toggleCheckbox);
-  $( '#taskDisplay' ).on('click', '.removeButton', removeTask);
+  $( '#taskDisplay' ).on('click', '.removeButton', openConfirmationDialog);
   $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
   $( '#taskDisplay' ).on('keypress', '.todo-textbox', updateTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
+  $( '.modal').on( 'show.bs.modal', openConfirmationDialog);
+  $('.canceled')
+  $('.confirmed').on('click', removeTask);
 }
 
 function toggleCheckbox() {
@@ -143,7 +135,7 @@ function toggleCheckbox() {
 }
 
 function updateTaskText(event) {
-  if (event.keyCode==13){
+  if (event.keyCode==13){ //if the enter key is pressed
     let id = $(this).closest('tr').data('id');
     let newText = {newText: $(this).children('input').val()};
     
@@ -152,6 +144,7 @@ function updateTaskText(event) {
     if (!$(this).children().is(':disabled')) {
       textbox.prop( "disabled", true );
       console.log(newText);
+
       $.ajax({
         type: 'PUT',
         url: '/list/update-text/' + id,
