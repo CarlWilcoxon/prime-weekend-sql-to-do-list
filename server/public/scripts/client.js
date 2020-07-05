@@ -35,10 +35,10 @@ function addTask() {
 function editTaskText() {
   // console.logs for troubleshooting, they can be removed
   console.log('edit button clicked', this);
-  console.log(textbox.is(':disabled'));
-
+  
   textbox = $(this).children();
-
+  console.log(textbox.is(':disabled'));
+  
   //if the textbox is disabled, enable it and fill it with the placeholder value
   //then focus on it, so that the user can type
   if (textbox.is(':disabled')) {
@@ -139,25 +139,29 @@ function updateTaskText(event) {
     let id = $(this).closest('tr').data('id');
     let newText = {newText: $(this).children('input').val()};
     
-    console.log('trying to update', id);
-    console.log($(this).children());
+    
+    // console.log($(this).children());
     if (!$(this).children().is(':disabled')) {
+      //disable the textbox again and if the text was changed, submit a PUT request
       textbox.prop( "disabled", true );
       console.log(newText);
 
-      $.ajax({
-        type: 'PUT',
-        url: '/list/update-text/' + id,
-        data: newText
-        //then, when you get a response, append a table row to the DOM with the info you received
-      }).then(function (response) {
-        console.log('DB updated!');
-        $(this).children('input').attr('placeholder', newText);
-      }).catch(function  (err) {
-        console.log('Error updating task:', err);
-      });
+      if ($(this).children('input').attr('placeholder') !== newText.newText) {
+        console.log('trying to update', id);
+        $.ajax({
+          type: 'PUT',
+          url: '/list/update-text/' + id,
+          data: newText
+          //then, when you get a response, append a table row to the DOM with the info you received
+          }).then(function (response) {
+            console.log('DB updated!');
+            $(this).children('input').attr('placeholder', newText);
+          }).catch(function  (err) {
+            console.log('Error updating task:', err);
+          })
+      }
     }
   } else {
-  return;
+  return; // if somehow the textbox is disabled, do nothing
   }
 }
