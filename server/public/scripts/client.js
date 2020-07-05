@@ -33,13 +33,11 @@ function addTask() {
 }
 
 function editTaskText() {
+  // console.logs for troubleshooting, they can be removed
   console.log('edit button clicked', this);
-  //try select [this] disabled object, then enable it, 
-  //else disable it and send an AJAX PUT request
-  
-  textbox = $(this).children();
-
   console.log(textbox.is(':disabled'));
+
+  textbox = $(this).children();
 
   //if the textbox is disabled, enable it and fill it with the placeholder value
   //then focus on it, so that the user can type
@@ -68,9 +66,10 @@ function formatList(response) {
 function openConfirmationDialog(event) {
   // console.log('this:', this);
   // console.log('correct id:', $(event.relatedTarget).closest('tr').data('id') );
-  let tempID = $(event.relatedTarget).closest('tr').data('id');
   
-  console.log($( '#dataStorage' ).data('id', tempID));
+  // Get the id that was stored in each table row. And store it for later.
+  let tempID = $(event.relatedTarget).closest('tr').data('id');
+  $( '#dataStorage' ).data('id', tempID);
 }
 
 function refreshTasks() {
@@ -88,9 +87,9 @@ function refreshTasks() {
 
 function removeTask() {
   console.log( 'Confirmed' );
-
+  // After the user has confirmed the removal, retrieve the task's id from storage
+  // and clear out the dataStorage div
   let id = $( '#dataStorage' ).data().id;
-  
   $( '#dataStorage' ).data('id', '');
 
   $.ajax({
@@ -136,7 +135,7 @@ function toggleCheckbox() {
 }
 
 function updateTaskText(event) {
-  if (event.keyCode==13){
+  if (event.keyCode==13){ //if the enter key is pressed
     let id = $(this).closest('tr').data('id');
     let newText = {newText: $(this).children('input').val()};
     
@@ -145,6 +144,7 @@ function updateTaskText(event) {
     if (!$(this).children().is(':disabled')) {
       textbox.prop( "disabled", true );
       console.log(newText);
+
       $.ajax({
         type: 'PUT',
         url: '/list/update-text/' + id,
