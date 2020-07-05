@@ -59,7 +59,7 @@ function formatList(response) {
       <tr data-id="${item.id}" ${(item.completed)? 'class="bg-success"': 'class="bg-info"'}>
         <td><input class="checkbox" type="checkbox" ${(item.completed)? 'checked' : ' '}/></td>
         <td class="todo-textbox"><input type="text" disabled placeholder="${item.task}" aria-label="${item.task} click to edit"></td>
-        <td><button class="removeButton btn btn-danger btn-sm" aria-label="Remove task">Remove</button></td>
+        <td><button class="removeButton btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmationDialog">Remove</button></td>
       </tr>
     `); // <td><button class="editButton">Edit</button></td>
   }
