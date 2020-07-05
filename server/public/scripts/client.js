@@ -65,6 +65,14 @@ function formatList(response) {
   }
 }
 
+function openConfirmationDialog(event) {
+  // console.log('this:', this);
+  // console.log('correct id:', $(event.relatedTarget).closest('tr').data('id') );
+  let tempID = $(event.relatedTarget).closest('tr').data('id');
+  
+  console.log($( '#dataStorage' ).data('id', tempID));
+}
+
 function refreshTasks() {
   console.log('in refreshTasks');
   $.ajax({
@@ -79,26 +87,35 @@ function refreshTasks() {
 }
 
 function removeTask() {
-  console.log(this);
-  let id = $(this).closest('tr').data('id');
+  console.log( 'Confirmed' );
+
+  let id = $( '#dataStorage' ).data().id;
+  
+  $( '#dataStorage' ).data('id', '');
 
   $.ajax({
     type: 'DELETE',
     url: '/list/' + id
     //then, when you get a response, append a table row to the DOM with the info you received
-  }).then(refreshTasks()
-  ).catch(function  (err) {
-    console.log('Error getting Koalas:', err);
+  }).then(function  (response) {
+    $('#confirmationDialog').modal('toggle');
+    refreshTasks();
+  }).catch(function  (err) {
+    console.log('Error removing task, try again:', err);
+
   });
 }
 
 function setupClickListeners() {
   $( '#addButton' ).on( 'click', addTask);
   $( '#taskDisplay').on('change', '.checkbox', toggleCheckbox);
-  $( '#taskDisplay' ).on('click', '.removeButton', removeTask);
+  $( '#taskDisplay' ).on('click', '.removeButton', openConfirmationDialog);
   $( '#taskDisplay' ).on('click', '.todo-textbox', editTaskText);
   $( '#taskDisplay' ).on('keypress', '.todo-textbox', updateTaskText);
   $( '#taskDisplay' ).submit('.todo-textbox', editTaskText);
+  $( '.modal').on( 'show.bs.modal', openConfirmationDialog);
+  $('.canceled')
+  $('.confirmed').on('click', removeTask);
 }
 
 function toggleCheckbox() {
